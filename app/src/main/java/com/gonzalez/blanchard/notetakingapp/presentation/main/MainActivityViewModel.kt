@@ -61,9 +61,7 @@ class MainActivityViewModel @Inject constructor(
         executeUseCase(action = {
             _status.send(MainActivityStatus.IsLoading)
             val result = searchNotesUseCase.execute(text)
-            if (result.isEmpty()) {
-                _actions.send(MainActivityActions.ShowEmptyNotes)
-            } else {
+            if (result.isNotEmpty()) {
                 _actions.send(MainActivityActions.ShowNotes(result))
             }
         }, exceptionHandler = {
