@@ -6,15 +6,14 @@ plugins {
     id(libs.plugins.kapt.get().pluginId)
     id(libs.plugins.androidx.navigation.get().pluginId)
     id(libs.plugins.ktlint.jlleitschuh.get().pluginId)
-    //   alias(libs.plugins.kotlin.android)
 }
 
 android {
-    namespace = "com.gonzalez.blanchard.note_taking_app"
+    namespace = "com.gonzalez.blanchard.notetakingapp"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.gonzalez.blanchard.note_taking_app"
+        applicationId = "com.gonzalez.blanchard.notetakingapp"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -75,14 +74,31 @@ dependencies {
     // Viewpager for home
     implementation(libs.androidx.viewpager2)
 
+    implementation(libs.kotlinx.coroutines.core)
+    implementation(libs.androidx.paging.common)
+    implementation(libs.androidx.room)
+    implementation(libs.androidx.room.coroutines)
+    implementation(libs.androidx.room.rxjava)
+    implementation(libs.sqlcipher)
+    implementation(libs.moshi.kotlin)
+    implementation(libs.moshi.adapters)
+    implementation(libs.androidx.junit.ktx)
+    implementation(libs.rxreactive.java)
+    implementation(libs.rxreactive.android)
+
+    implementation(libs.retrofit.core)
+    implementation(libs.retrofit.moshi)
+    implementation(libs.okhttp.logging)
+
     // Picasso for images
     implementation(libs.picasso)
     implementation("jp.wasabeef:picasso-transformations:2.4.0")
 
     kapt(libs.dagger.hilt.compiler)
     kapt(libs.dagger.compiler)
+    kapt(libs.androidx.room.compiler)
 
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(libs.junit)
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

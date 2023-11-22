@@ -1,4 +1,4 @@
-package com.gonzalez.blanchard.note_taking_app
+package com.gonzalez.blanchard.notetakingapp
 
 import org.junit.Test
 
