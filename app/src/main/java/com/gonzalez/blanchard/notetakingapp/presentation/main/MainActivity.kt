@@ -5,7 +5,8 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.gonzalez.blanchard.notetakingapp.databinding.ActivityMainBinding
 import com.gonzalez.blanchard.notetakingapp.domain.models.NoteModel
 import com.gonzalez.blanchard.notetakingapp.presentation.adapters.NotesAdapter
@@ -85,7 +86,7 @@ class MainActivity : AppCompatActivity() {
         val notesAdapter = NotesAdapter(notes) {
             mainActivityViewModel.onNoteClicked(it)
         }
-        binding.rvNotes.layoutManager = GridLayoutManager(this, 2)
+        binding.rvNotes.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
         binding.rvNotes.adapter = notesAdapter
     }
 
