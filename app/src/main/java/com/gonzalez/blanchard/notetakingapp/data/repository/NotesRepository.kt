@@ -14,12 +14,16 @@ class NotesRepository @Inject constructor(
         return response.map { it.toDomain() }
     }
 
-    suspend fun getNote(noteid: Int): NoteModel {
+    suspend fun getNote(noteid: Long): NoteModel {
         val response = dao.getDetail(noteid)
         return response.map { it.toDomain() }.first()
     }
 
     suspend fun insertNote(noteModel: NoteModel) {
         dao.insert(noteModel.toDatabase())
+    }
+
+    suspend fun updateNote(noteModel: NoteModel) {
+        dao.update(noteModel.toDatabase())
     }
 }

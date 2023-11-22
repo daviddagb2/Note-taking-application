@@ -4,9 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.gonzalez.blanchard.notetakingapp.R
 import com.gonzalez.blanchard.notetakingapp.databinding.ActivityMainBinding
 import com.gonzalez.blanchard.notetakingapp.domain.models.NoteModel
 import com.gonzalez.blanchard.notetakingapp.presentation.adapters.NotesAdapter
@@ -67,11 +69,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun goToNoteDetail(note: NoteModel) {
-        Intent(this, NoteActivity::class.java).apply {
-            putExtra(ITEM_NOTE_CLICKED, note.id)
-        }.let {
-            startActivity(it)
-        }
+        val intent = Intent(this, NoteActivity::class.java)
+        intent.putExtra(ITEM_NOTE_CLICKED, note.id.toString())
+        val options = ActivityOptionsCompat.makeSceneTransitionAnimation(
+            this,
+            findViewById(R.id.tvTitle),
+            "transitionTitle",
+        )
+        startActivity(intent, options.toBundle())
     }
 
     private fun goToAddNote() {

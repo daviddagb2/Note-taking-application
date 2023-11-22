@@ -17,4 +17,5 @@ data class NoteEntity(
     @ColumnInfo(name = "is_archived") val isArchived: Boolean?,
     @ColumnInfo(name = "color") val color: String?,
     @ColumnInfo(name = "reminder") val reminder: String?,
+    @ColumnInfo(name = "timestamp") val timestamp: Long?,
 )

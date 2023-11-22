@@ -14,4 +14,5 @@ fun NoteModel.toDatabase(): NoteEntity =
         isArchived = this.isArchived,
         color = this.color,
         reminder = this.reminder,
+        timestamp = this.timestamp,
     )

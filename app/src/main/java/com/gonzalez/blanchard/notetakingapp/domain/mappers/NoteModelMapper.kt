@@ -14,4 +14,5 @@ fun NoteEntity.toDomain(): NoteModel =
         isArchived = this.isArchived ?: false,
         color = this.color ?: "",
         reminder = this.reminder ?: "",
+        timestamp = this.timestamp ?: 0L,
     )

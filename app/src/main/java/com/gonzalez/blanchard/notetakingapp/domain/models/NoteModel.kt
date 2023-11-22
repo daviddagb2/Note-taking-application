@@ -1,5 +1,7 @@
 package com.gonzalez.blanchard.notetakingapp.domain.models
 
+import java.sql.Timestamp
+
 data class NoteModel(
     val id: Long,
     val title: String,
@@ -10,4 +12,5 @@ data class NoteModel(
     val isArchived: Boolean,
     val color: String,
     val reminder: String,
+    val timestamp: Long,
 )

@@ -2,4 +2,5 @@
     <string name="app_name">note-taking-app</string>
     <string name="str_empty_notes">No notes available</string>
     <string name="str_my_notes">My Notes</string>
+    <string name="search">Search</string>
 </resources>
