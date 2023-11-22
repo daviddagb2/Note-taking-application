@@ -99,6 +99,8 @@ dependencies {
     kapt(libs.androidx.room.compiler)
 
     testImplementation(libs.junit)
+    testImplementation(libs.mock)
+
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
 }

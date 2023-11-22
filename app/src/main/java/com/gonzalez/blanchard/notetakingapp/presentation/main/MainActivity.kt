@@ -2,6 +2,8 @@ package com.gonzalez.blanchard.notetakingapp.presentation.main
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
@@ -55,9 +57,9 @@ class MainActivity : AppCompatActivity() {
     private fun initStatusListener() {
         this.launchAndCollect(mainActivityViewModel.status) { status ->
             when (status) {
-                MainActivityStatus.IsLoading -> showLoader()
-                MainActivityStatus.Idle -> hideLoader()
                 is MainActivityStatus.Error -> showError(status.error)
+                MainActivityStatus.Idle -> hideLoader()
+                MainActivityStatus.IsLoading ->  showLoader()
             }
         }
     }
@@ -66,6 +68,21 @@ class MainActivity : AppCompatActivity() {
         binding.fabAddNote.setOnClickListener {
             mainActivityViewModel.onAddNoteClicked()
         }
+
+        binding.editTextSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+
+                val searchText = s?.toString() ?: ""
+                mainActivityViewModel.onSearchTextChanged(searchText)
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
     }
 
     private fun goToNoteDetail(note: NoteModel) {

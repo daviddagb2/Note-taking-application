@@ -48,6 +48,12 @@ class NoteActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        binding.btnDelete.setOnClickListener {
+            noteViewModel.onDeleteNote()
+            noteViewModel.setShouldSaveOnBack(false)
+            onBackPressed()
+        }
+
         binding.tvTitle.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
             }
@@ -112,9 +118,11 @@ class NoteActivity : AppCompatActivity() {
     }
 
     override fun onBackPressed() {
-        noteViewModel.setTitle(binding.tvTitle.text.toString())
-        noteViewModel.setContent(binding.tvContent.text.toString())
-        noteViewModel.onSaveNote()
+        if (noteViewModel.shouldSaveOnBack) {
+            noteViewModel.setTitle(binding.tvTitle.text.toString())
+            noteViewModel.setContent(binding.tvContent.text.toString())
+            noteViewModel.onSaveNote()
+        }
         super.onBackPressed()
     }
 }

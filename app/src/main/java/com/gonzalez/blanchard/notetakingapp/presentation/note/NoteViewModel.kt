@@ -4,6 +4,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.gonzalez.blanchard.notetakingapp.core.BaseViewModel
 import com.gonzalez.blanchard.notetakingapp.domain.models.NoteModel
+import com.gonzalez.blanchard.notetakingapp.domain.usecases.DeleteNoteUseCase
 import com.gonzalez.blanchard.notetakingapp.domain.usecases.GetNoteUseCase
 import com.gonzalez.blanchard.notetakingapp.domain.usecases.InsertNoteUseCase
 import com.gonzalez.blanchard.notetakingapp.domain.usecases.UpdateNoteUseCase
@@ -19,6 +20,7 @@ class NoteViewModel @Inject constructor(
     private val getNoteUseCase: GetNoteUseCase,
     private val insertNoteUseCase: InsertNoteUseCase,
     private val updateNoteUseCase: UpdateNoteUseCase,
+    private val deleteNoteUseCase: DeleteNoteUseCase,
 ) : BaseViewModel() {
 
     private val _actions = Channel<NoteActions>()
@@ -29,6 +31,9 @@ class NoteViewModel @Inject constructor(
 
     var _noteItem = MutableLiveData<NoteModel>()
     val noteItem: MutableLiveData<NoteModel> = _noteItem
+
+    var shouldSaveOnBack: Boolean = true
+        private set
 
     fun viewCreated() {
         viewModelScope.launch {
@@ -60,6 +65,10 @@ class NoteViewModel @Inject constructor(
         }, finallyHandler = {
             _status.send(NoteStatus.Idle)
         })
+    }
+
+    fun setShouldSaveOnBack(value: Boolean) {
+        shouldSaveOnBack = value
     }
 
     fun setTitle(title: String) {
@@ -104,5 +113,20 @@ class NoteViewModel @Inject constructor(
         }, finallyHandler = {
             _status.send(NoteStatus.Idle)
         })
+    }
+
+    fun onDeleteNote() {
+        val noteToDelete = noteItem.value
+        if (noteToDelete != null && noteToDelete.id != 0L) {
+            executeUseCase(action = {
+                _status.send(NoteStatus.IsLoading)
+                deleteNoteUseCase.execute(noteToDelete)
+            }, exceptionHandler = {
+                _status.send(NoteStatus.Error(it.toString()))
+            }, finallyHandler = {
+                _status.send(NoteStatus.Idle)
+            })
+        }
+        setShouldSaveOnBack(false)
     }
 }

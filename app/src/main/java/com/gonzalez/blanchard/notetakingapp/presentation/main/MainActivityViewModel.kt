@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.gonzalez.blanchard.notetakingapp.core.BaseViewModel
 import com.gonzalez.blanchard.notetakingapp.domain.models.NoteModel
 import com.gonzalez.blanchard.notetakingapp.domain.usecases.GetNoteListUseCase
+import com.gonzalez.blanchard.notetakingapp.domain.usecases.SearchNotesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -13,6 +14,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(
     private val getNoteListUseCase: GetNoteListUseCase,
+    private val searchNotesUseCase: SearchNotesUseCase,
 ) : BaseViewModel() {
 
     private val _actions = Channel<MainActivityActions>()
@@ -53,5 +55,21 @@ class MainActivityViewModel @Inject constructor(
         viewModelScope.launch {
             _actions.send(MainActivityActions.GoToAddNote)
         }
+    }
+
+    fun onSearchTextChanged(text: String) {
+        executeUseCase(action = {
+            _status.send(MainActivityStatus.IsLoading)
+            val result = searchNotesUseCase.execute(text)
+            if (result.isEmpty()) {
+                _actions.send(MainActivityActions.ShowEmptyNotes)
+            } else {
+                _actions.send(MainActivityActions.ShowNotes(result))
+            }
+        }, exceptionHandler = {
+            _status.send(MainActivityStatus.Error(it.toString()))
+        }, finallyHandler = {
+            _status.send(MainActivityStatus.Idle)
+        })
     }
 }

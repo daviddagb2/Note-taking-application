@@ -4,6 +4,7 @@ import com.gonzalez.blanchard.notetakingapp.data.database.dao.NotesDao
 import com.gonzalez.blanchard.notetakingapp.data.database.mappers.toDatabase
 import com.gonzalez.blanchard.notetakingapp.domain.mappers.toDomain
 import com.gonzalez.blanchard.notetakingapp.domain.models.NoteModel
+import com.gonzalez.blanchard.notetakingapp.utils.exceptions.NoteNotFoundException
 import javax.inject.Inject
 
 class NotesRepository @Inject constructor(
@@ -14,9 +15,17 @@ class NotesRepository @Inject constructor(
         return response.map { it.toDomain() }
     }
 
+    suspend fun searchNotes(searchName: String): List<NoteModel> {
+        val response = dao.searchNote(searchName)
+        return response.map { it.toDomain() }
+    }
+
     suspend fun getNote(noteid: Long): NoteModel {
         val response = dao.getDetail(noteid)
-        return response.map { it.toDomain() }.first()
+        val noteEntity = response.map { it.toDomain() }.firstOrNull()
+            ?: throw NoteNotFoundException("Note with ID $noteid not found.")
+
+        return noteEntity
     }
 
     suspend fun insertNote(noteModel: NoteModel) {
@@ -25,5 +34,9 @@ class NotesRepository @Inject constructor(
 
     suspend fun updateNote(noteModel: NoteModel) {
         dao.update(noteModel.toDatabase())
+    }
+
+    suspend fun deleteNote(noteModel: NoteModel) {
+        dao.delete(noteModel.id)
     }
 }
