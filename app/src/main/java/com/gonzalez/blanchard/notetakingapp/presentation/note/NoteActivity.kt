@@ -84,6 +84,7 @@ class NoteActivity : AppCompatActivity() {
             when (actions) {
                 is NoteActions.LoadNote -> loadNote(actions.note)
                 is NoteActions.SaveNote -> saveNote()
+                is NoteActions.SetDate -> binding.textViewDateCharacterCount.text = actions.date
             }
         }
     }

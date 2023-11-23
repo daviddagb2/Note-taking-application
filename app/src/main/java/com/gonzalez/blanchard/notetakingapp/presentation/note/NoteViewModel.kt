@@ -83,13 +83,16 @@ class NoteViewModel @Inject constructor(
         _noteItem.value = _noteItem.value?.copy(id = id)
     }
 
-    fun setDate() {
-        val currentDateTime = DateTime()
-        val creationDate = currentDateTime.toDate()
-        _noteItem.value = _noteItem.value?.copy(date = creationDate.toString())
+    private fun setDate() {
+        viewModelScope.launch {
+            val currentDateTime = DateTime()
+            val creationDate = currentDateTime.toDate()
+            _noteItem.value = _noteItem.value?.copy(date = creationDate.toString())
+            _actions.send(NoteActions.SetDate(creationDate.toString()))
+        }
     }
 
-    fun setTimestamp() {
+    private fun setTimestamp() {
         val currentTimeMillis = System.currentTimeMillis()
         val timestamp = (currentTimeMillis / 1000)
         _noteItem.value = _noteItem.value?.copy(timestamp = timestamp)
