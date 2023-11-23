@@ -3,6 +3,7 @@ package com.gonzalez.blanchard.notetakingapp.presentation.main
 import androidx.lifecycle.viewModelScope
 import com.gonzalez.blanchard.notetakingapp.core.BaseViewModel
 import com.gonzalez.blanchard.notetakingapp.domain.models.NoteModel
+import com.gonzalez.blanchard.notetakingapp.domain.usecases.DeleteNoteUseCase
 import com.gonzalez.blanchard.notetakingapp.domain.usecases.GetNoteListUseCase
 import com.gonzalez.blanchard.notetakingapp.domain.usecases.SearchNotesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +16,7 @@ import javax.inject.Inject
 class MainActivityViewModel @Inject constructor(
     private val getNoteListUseCase: GetNoteListUseCase,
     private val searchNotesUseCase: SearchNotesUseCase,
+    private val deleteNoteUseCase: DeleteNoteUseCase,
 ) : BaseViewModel() {
 
     private val _actions = Channel<MainActivityActions>()
@@ -62,6 +64,23 @@ class MainActivityViewModel @Inject constructor(
             _status.send(MainActivityStatus.IsLoading)
             val result = searchNotesUseCase.execute(text)
             if (result.isNotEmpty()) {
+                _actions.send(MainActivityActions.ShowNotes(result))
+            }
+        }, exceptionHandler = {
+            _status.send(MainActivityStatus.Error(it.toString()))
+        }, finallyHandler = {
+            _status.send(MainActivityStatus.Idle)
+        })
+    }
+
+    fun onNoteDeleted(noteToDelete: NoteModel) {
+        executeUseCase(action = {
+            _status.send(MainActivityStatus.IsLoading)
+            deleteNoteUseCase.execute(noteToDelete)
+            val result = getNoteListUseCase.execute(Unit)
+            if (result.isEmpty()) {
+                _actions.send(MainActivityActions.ShowEmptyNotes)
+            } else {
                 _actions.send(MainActivityActions.ShowNotes(result))
             }
         }, exceptionHandler = {

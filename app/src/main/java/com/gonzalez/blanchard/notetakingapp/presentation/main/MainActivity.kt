@@ -4,16 +4,19 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.gonzalez.blanchard.notetakingapp.R
 import com.gonzalez.blanchard.notetakingapp.databinding.ActivityMainBinding
 import com.gonzalez.blanchard.notetakingapp.domain.models.NoteModel
 import com.gonzalez.blanchard.notetakingapp.presentation.adapters.NotesAdapter
+import com.gonzalez.blanchard.notetakingapp.presentation.adapters.SwipeRecyclerViewHelperCallback
 import com.gonzalez.blanchard.notetakingapp.presentation.note.NoteActivity
 import com.gonzalez.blanchard.notetakingapp.utils.ITEM_NOTE_CLICKED
 import com.gonzalez.blanchard.notetakingapp.utils.launchAndCollect
@@ -104,16 +107,45 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showNotesList(notes: List<NoteModel>) {
-        binding.rvNotes.isVisible = true
-        val notesAdapter = NotesAdapter(notes) {
-            mainActivityViewModel.onNoteClicked(it)
+        if (notes.isNotEmpty()) {
+            if (binding.rvNotes.adapter == null) {
+                val notesAdapter = NotesAdapter(notes.toMutableList(), ::onNoteClicked, ::onSwipeDelete)
+                binding.rvNotes.layoutManager = LinearLayoutManager(this)
+                binding.rvNotes.adapter = notesAdapter
+
+                val itemTouchHelperCallback = SwipeRecyclerViewHelperCallback(notesAdapter)
+                val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+                itemTouchHelper.attachToRecyclerView(binding.rvNotes)
+            } else {
+                (binding.rvNotes.adapter as? NotesAdapter)?.updateNotes(notes)
+            }
+            hideEmptyListMessage()
+        } else {
+            showEmptyListMessage()
         }
-        binding.rvNotes.layoutManager = StaggeredGridLayoutManager(2, LinearLayoutManager.VERTICAL)
-        binding.rvNotes.adapter = notesAdapter
+    }
+
+    private fun showEmptyListMessage() {
+        binding.llEmptyNotes.isVisible = true
+        binding.rvNotes.isVisible = false
+    }
+
+    private fun hideEmptyListMessage() {
+        binding.llEmptyNotes.isVisible = false
+        binding.rvNotes.isVisible = true
+    }
+
+    private fun onNoteClicked(note: NoteModel) {
+        mainActivityViewModel.onNoteClicked(note)
+    }
+
+    private fun onSwipeDelete(note: NoteModel) {
+        mainActivityViewModel.onNoteDeleted(note)
     }
 
     private fun showEmptyList() {
         binding.llEmptyNotes.isVisible = true
+        binding.rvNotes.isVisible = false
     }
 
     private fun showLoader() {
@@ -126,5 +158,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun showError(error: String) {
+        Toast.makeText(this, error, Toast.LENGTH_SHORT).show()
     }
 }

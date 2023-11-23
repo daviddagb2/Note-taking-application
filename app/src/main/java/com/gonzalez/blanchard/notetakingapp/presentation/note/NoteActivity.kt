@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import androidx.activity.viewModels
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.gonzalez.blanchard.notetakingapp.databinding.ActivityNoteBinding
@@ -49,9 +51,7 @@ class NoteActivity : AppCompatActivity() {
         }
 
         binding.btnDelete.setOnClickListener {
-            noteViewModel.onDeleteNote()
-            noteViewModel.setShouldSaveOnBack(false)
-            onBackPressed()
+            showDeleteConfirmationDialog()
         }
 
         binding.tvTitle.addTextChangedListener(object : TextWatcher {
@@ -117,7 +117,32 @@ class NoteActivity : AppCompatActivity() {
     private fun saveNote() {
     }
 
+    private fun showDeleteConfirmationDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("Confirm delete")
+        builder.setMessage("Are you sure you want to delete this note?")
+        builder.setNegativeButton("Cancel") { dialog, _ ->
+            dialog.dismiss()
+        }
+
+        builder.setPositiveButton("Delete") { dialog, _ ->
+            noteViewModel.onDeleteNote()
+            noteViewModel.setShouldSaveOnBack(false)
+            // Cierra el diálogo
+            dialog.dismiss()
+            onBackPressed()
+        }
+
+        val dialog = builder.create()
+        dialog.show()
+    }
+
     override fun onBackPressed() {
+
+        if(binding.tvTitle.text.toString().isEmpty() && binding.tvContent.text.toString().isEmpty()){
+            noteViewModel.onDeleteNote()
+        }
+
         if (noteViewModel.shouldSaveOnBack) {
             noteViewModel.setTitle(binding.tvTitle.text.toString())
             noteViewModel.setContent(binding.tvContent.text.toString())
