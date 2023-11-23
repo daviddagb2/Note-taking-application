@@ -59,8 +59,7 @@ This project is evaluated based on the following criteria:
 - Error Handling: The application should handle errors gracefully.
 
 ## Extra Points
-To earn extra points, consider the following:
-- Implement unit tests for key functions to ensure code reliability, for this project unit tests were implemented for the use cases.
+- Implemented unit tests for key functions to ensure code reliability, for this project unit tests were implemented for the use cases.
 - Utilize dependency injection with Dagger.
 
 ## Tech stack & Open-source libraries
