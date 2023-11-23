@@ -12,17 +12,17 @@ The project follows the MVVM (Model-View-ViewModel) architecture pattern and use
 
 ### Project Components
 
-- `core` module: Contain core components for the app like the BaseViewModel
-- `data` package: Includes data source, database, and repository classes.
+- `core`: module: Contain core components for the app like the BaseViewModel
+- `data`: Includes data source, database, and repository classes.
 - `data/database`: Includes packages related to Room database implementation
 - `data/database/dao`: Includes all Dao (Data Access Object) with the queries of the project
 - `data/database/entities`: All Database entities
 - `data/database/mappers`: These mappers enable the conversion of business model data into database entity representations.
 - `data/repository`: Includes all the data repositories related to the app.
 - `di`: dependency Injection
-- `domain` package: Contains business logic and use cases. Also contains the Bussine Models.
-- `presentation` package: Contains UI-related components such as activities, fragments, and adapters.
-- `utils` package: Includes utility classes and constants.
+- `domain`: Contains business logic and use cases. Also contains the Business Models.
+- `presentation`:  Contains UI-related components such as activities, fragments, and adapters.
+- `utils`: Includes utility classes and constants.
 
 ## Running the Application
 
