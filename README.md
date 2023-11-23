@@ -31,7 +31,7 @@ To run the application, follow these steps:
 1. Clone this repository to your local machine:
 
    ```shell
-   git clone https://github.com/your-username/note-taking-app.git
+   git clone https://github.com/daviddagb2/Note-taking-application.git
 
 ## Design Decisions
 
