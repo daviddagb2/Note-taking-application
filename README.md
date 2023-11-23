@@ -33,6 +33,16 @@ To run the application, follow these steps:
    ```shell
    git clone https://github.com/daviddagb2/Note-taking-application.git
 
+
+2. Open Android Studio.
+3. In Android Studio, select "File" from the top menu bar, and then select "Open." Navigate to the location where you cloned the repository and select the project folder.
+4. Wait for Android Studio to sync the project and set up dependencies.
+5. Connect an Android device to your computer or use an Android emulator.
+6. Ensure that Android Studio has detected your device or emulator.
+7. Click the "Run" button in Android Studio (usually a play icon) or use the keyboard shortcut Shift + F10.
+8. Android Studio will build and run the app on your selected device or emulator.
+9. Wait for the app to launch. You should see the list of notes and be able to interact with the app.
+
 ## Design Decisions
 
 - The MVVM architecture pattern is used to separate concerns and maintain a clean and testable codebase.
