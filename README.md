@@ -4,7 +4,7 @@ This is a simple Android note-taking application developed using Kotlin. It allo
 ## Download APK
 The APK can be downloaded for testing purposes. The link will be provided upon successful build and release.
 
-- [APK DEMO LINK](#)
+- [APK DEMO LINK](https://github.com/daviddagb2/Note-taking-application/raw/master/apk/app-debug.apk)
 
 ## Project Structure
 
